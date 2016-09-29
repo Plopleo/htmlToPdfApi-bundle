@@ -1,5 +1,5 @@
 {
-    "name": "Plopleo/htmlToPdfApi",
+    "name": "Plopleo/htmlToPdfApi-bundle",
     "type": "symfony-bundle",
     "description": "Copromatic HtmlToPdf Api",
     "require": {
