@@ -9,5 +9,5 @@
     "autoload": {
         "psr-0": { "HtmlToPdfBundle\\": "" }
     },
-    "target-dir": "htmlToPdfApi-bundle",
+    "target-dir": "htmlToPdfApi-bundle"
 }
