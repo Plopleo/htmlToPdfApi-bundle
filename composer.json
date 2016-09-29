@@ -5,5 +5,9 @@
     "require": {
         "php": ">=5.4.0"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": { "SerializerBundle\\": "" }
+    },
+    "target-dir": "Plopleo/htmlToPdfApi-bundle"
 }
