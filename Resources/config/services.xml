@@ -27,6 +27,8 @@
                 <argument>%htmltopdf.client.options.defaultMarginBottom%</argument>
             </call>
         </service>
+        <service id="htmltopdf.controller.service" class="HtmlToPdfBundle\Controller\AbstractController" public="true">
+        </service>
     </services>
 
 </container>
