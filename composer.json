@@ -1,0 +1,8 @@
+{
+    "name": "htmlToPdfApi",
+    "type": "symfony-bundle",
+    "description": "Copromatic HtmlToPdf Api",
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
