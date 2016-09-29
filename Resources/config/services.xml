@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <parameters>
+        <parameter key="htmltopdf.clienthttp.class">GuzzleHttp\Client</parameter>
+        <parameter key="htmltopdf.client.class">HtmlToPdfBundle\Api\Client</parameter>
+        <parameter key="htmltopdf.client.options.defaultMarginTop">25mm</parameter>
+        <parameter key="htmltopdf.client.options.defaultMarginBottom">45mm</parameter>
+    </parameters>
+
+    <services>
+        <service id="htmltopdf.clienthttp" class="%htmltopdf.clienthttp.class%" public="true">
+            <argument type="collection">
+                <argument key="base_uri">%htmltopdf.clienthttp.config.base_uri%</argument>
+            </argument>
+        </service>
+        <service id="htmltopdf.client" class="%htmltopdf.client.class%" public="true">
+            <argument id="htmltopdf.clienthttp" type="service"/>
+            <call method="setDefaultMarginTop">
+                <argument>%htmltopdf.client.options.defaultMarginTop%</argument>
+            </call>
+            <call method="setDefaultMarginBottom">
+                <argument>%htmltopdf.client.options.defaultMarginBottom%</argument>
+            </call>
+        </service>
+    </services>
+
+</container>
