@@ -7,6 +7,7 @@
     },
     "minimum-stability": "dev",
     "autoload": {
-        "psr-4": { "HtmlToPdfBundle\\": "htmlToPdfApi-bundle" }
-    }
+        "psr-0": { "HtmlToPdfBundle\\": "" }
+    },
+    "target-dir": "htmlToPdfApi-bundle",
 }
