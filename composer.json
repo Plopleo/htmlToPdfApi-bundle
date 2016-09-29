@@ -7,7 +7,6 @@
     },
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": { "HtmlToPdfBundle\\": "" }
-    },
-    "target-dir": "Plopleo/htmlToPdfApi-bundle"
+        "psr-4": { "HtmlToPdfBundle\\": "" }
+    }
 }
