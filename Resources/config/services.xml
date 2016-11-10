@@ -20,6 +20,8 @@
         </service>
         <service id="htmltopdf.client" class="%htmltopdf.client.class%" public="true">
             <argument id="htmltopdf.clienthttp" type="service"/>
+            <argument id="logger" type="service"/>
+            <tag name="monolog.logger" channel="pdf" />
             <call method="setDefaultMarginTop">
                 <argument>%htmltopdf.client.options.defaultMarginTop%</argument>
             </call>

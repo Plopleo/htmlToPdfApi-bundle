@@ -2,16 +2,25 @@
 
 namespace HtmlToPdfBundle\Api;
 
+use Monolog\Logger;
+
 class Client
 {
     /** @var \GuzzleHttp\Client */
     protected $client = null;
+    protected $logger = null;
 
     protected $default_margin_top = '10mm';
     protected $default_margin_bottom = '10mm';
 
-    public function __construct($client) {
+    /**
+     * Client constructor.
+     * @param $client
+     * @param Logger $logger
+     */
+    public function __construct($client, $logger) {
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     /**
@@ -43,6 +52,7 @@ class Client
             )
         );
 
+        $this->logger->addInfo('PDF generation: '.$response->getReasonPhrase());
         if ($response->getReasonPhrase() == 'OK') {
             $json = json_decode($response->getBody()->getContents(), true);
             return utf8_decode($json['pdf_content']);
