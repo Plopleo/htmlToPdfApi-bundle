@@ -22,15 +22,15 @@ class AbstractController extends Controller
         return $response;
     }
 
-    public function renderPdf($template, $params, $titre_pdf = 'default')
+    public function renderPdf($template, $params, $titre_pdf = 'default', $options = [])
     {
         $htmlContent = $this->render($template, $params)->getContent();
-        return $this->renderPdfFromHtml($htmlContent, $titre_pdf);
+        return $this->renderPdfFromHtml($htmlContent, $titre_pdf, $options);
     }
 
-    public function renderPdfFromHtml($htmlContent, $titre_pdf = 'default')
+    public function renderPdfFromHtml($htmlContent, $titre_pdf = 'default', $options = [])
     {
-        $pdfContent = $this->get('htmltopdf.client')->getPdfContent($htmlContent);
+        $pdfContent = $this->get('htmltopdf.client')->getPdfContent($htmlContent, $titre_pdf, $options);
 
         $response = new Response();
         $response->setContent($pdfContent);
@@ -39,9 +39,9 @@ class AbstractController extends Controller
         return $response;
     }
 
-    public function returnResponse($html, $template, $params, $titre_pdf = 'default')
+    public function returnResponse($html, $template, $params, $titre_pdf = 'default', $options = [])
     {
-        $response = $html ? $this->renderHtml($template, $params) : $this->renderPdf($template, $params, $titre_pdf);
+        $response = $html ? $this->renderHtml($template, $params) : $this->renderPdf($template, $params, $titre_pdf, $options);
 
         return $response;
     }

@@ -13,6 +13,9 @@ class Client
     protected $default_margin_top = '10mm';
     protected $default_margin_bottom = '10mm';
 
+    protected $default_margin_left = '10mm';
+    protected $default_margin_right = '10mm';
+
     /**
      * Client constructor.
      * @param $client
@@ -38,7 +41,7 @@ class Client
     {
         $this->default_margin_bottom = $default_margin_bottom;
     }
-    
+
     public function getPdfContent($html, $titre = '', $options = array())
     {
         $response = $this->client->post(
@@ -48,6 +51,8 @@ class Client
                     'html_content' => $html,
                     'footer-margin-bottom' => isset($options['footer-margin-bottom'])?$options['footer-margin-bottom']:$this->default_margin_bottom,
                     'header-margin-top' => isset($options['header-margin-top'])?$options['header-margin-top']:$this->default_margin_top,
+                    'margin-left' => isset($options['margin-left'])?$options['margin-left']:$this->default_margin_left,
+                    'margin-right' => isset($options['margin-right'])?$options['margin-right']:$this->default_margin_right,
                 ]
             )
         );
