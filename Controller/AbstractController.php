@@ -36,8 +36,11 @@ class AbstractController extends Controller
         $pdfContent = $this->get('htmltopdf.client')->getPdfContent($htmlContent, $titre_pdf, $options);
 
         if(isset($options['protected']) && $options['protected']){
+            $filesToRemove = [];
+
             $webPath = 'tmp/pdf/'.uniqid().'.pdf';
             $path = $this->getParameter('kernel.root_dir').'/../web/'.$webPath;
+            $filesToRemove[] = $path;
             if(!is_dir(dirname($path))){
                 mkdir(dirname($path), 0777, true);
             }
@@ -57,6 +60,7 @@ class AbstractController extends Controller
                     ->setResolution(450, 636) //compromis entre la taille du fichier et la taille de l image
                     ->saveImage($pathImage)
                 ;
+                $filesToRemove[] = $pathImage;
 
                 $htmlImage .= '
         <div class="page"><img src="'.$this->get('request_stack')->getMasterRequest()->getSchemeAndHttpHost().'/'.$webPath.'.'.$i.'.jpg" style="width: 99%"></div>
@@ -76,6 +80,10 @@ class AbstractController extends Controller
                     'margin-right' => 0
                 ]
             );
+
+            foreach($filesToRemove as $file){
+                unlink($file);
+            }
         }
 
         $response = new Response();
