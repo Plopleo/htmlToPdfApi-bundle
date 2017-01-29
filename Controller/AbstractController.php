@@ -8,7 +8,9 @@
 
 namespace HtmlToPdfBundle\Controller;
 
+use Spatie\PdfToImage\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 
 class AbstractController extends Controller
@@ -25,12 +27,56 @@ class AbstractController extends Controller
     public function renderPdf($template, $params, $titre_pdf = 'default', $options = [])
     {
         $htmlContent = $this->render($template, $params)->getContent();
+        $htmlContent = str_replace(['€', '’'], ['&euro;', '\''], $htmlContent);
         return $this->renderPdfFromHtml($htmlContent, $titre_pdf, $options);
     }
 
     public function renderPdfFromHtml($htmlContent, $titre_pdf = 'default', $options = [])
     {
         $pdfContent = $this->get('htmltopdf.client')->getPdfContent($htmlContent, $titre_pdf, $options);
+
+        if(isset($options['protected']) && $options['protected']){
+            $webPath = 'tmp/pdf/'.uniqid().'.pdf';
+            $path = $this->getParameter('kernel.root_dir').'/../web/'.$webPath;
+            if(!is_dir(dirname($path))){
+                mkdir(dirname($path), 0777, true);
+            }
+            file_put_contents($path, $pdfContent);
+
+            $htmlImage = '
+<html>
+    <head></head>
+    <body>
+';
+            $imagick = new Pdf($path);
+            for($i = 1; $i <= $imagick->getNumberOfPages(); $i++){
+                $pathImage = $path.'.'.$i.'.jpg';
+                $imagick
+                    ->setPage($i)
+                    ->setOutputFormat('jpeg')
+                    ->setResolution(450, 636) //compromis entre la taille du fichier et la taille de l image
+                    ->saveImage($pathImage)
+                ;
+
+                $htmlImage .= '
+        <div class="page"><img src="'.$this->get('request_stack')->getMasterRequest()->getSchemeAndHttpHost().'/'.$webPath.'.'.$i.'.jpg" style="width: 99%"></div>
+';
+            }
+            $htmlImage .= '
+    </body>
+</html>
+';
+            $pdfContent = $this->get('htmltopdf.client')->getPdfContent(
+                $htmlImage,
+                $titre_pdf,
+                [
+                    'footer-margin-bottom' => 0,
+                    'header-margin-top' => 0,
+                    'margin-left' => 0,
+                    'margin-right' => 0
+                ]
+            );
+        }
 
         $response = new Response();
         $response->setContent($pdfContent);
