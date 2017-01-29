@@ -27,7 +27,7 @@ class AbstractController extends Controller
     public function renderPdf($template, $params, $titre_pdf = 'default', $options = [])
     {
         $htmlContent = $this->render($template, $params)->getContent();
-        $htmlContent = str_replace(['€', '’'], ['&euro;', '\''], $htmlContent);
+        $htmlContent = str_replace(['€', '’'], ['EUR', '\''], $htmlContent); //problématique sur certains caractères
         return $this->renderPdfFromHtml($htmlContent, $titre_pdf, $options);
     }
 
